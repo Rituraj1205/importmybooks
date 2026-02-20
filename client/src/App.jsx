@@ -1,6 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-const API_BASE = "http://localhost:3001/api";
+const resolveApiBase = () => {
+  if (import.meta.env.VITE_API_BASE) {
+    return import.meta.env.VITE_API_BASE;
+  }
+  const path = window.location.pathname || "/";
+  if (path.startsWith("/xero-data-extraction/")) {
+    return "/xero-data-extraction/api";
+  }
+  return "/api";
+};
+
+const API_BASE = resolveApiBase();
 
 function App() {
   const [user, setUser] = useState(null);
@@ -175,6 +186,18 @@ function App() {
       setStatus("Folder path copied.");
     } catch {
       setStatus("Copy failed. Please copy manually.");
+    }
+  };
+
+  const parseApiResponse = async (res) => {
+    const text = await res.text();
+    if (!text) {
+      return { data: {}, rawText: "" };
+    }
+    try {
+      return { data: JSON.parse(text), rawText: text };
+    } catch {
+      return { data: {}, rawText: text };
     }
   };
 
@@ -689,9 +712,13 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: authEmail, password: authPassword }),
       });
-      const data = await res.json();
+      const { data, rawText } = await parseApiResponse(res);
       if (!res.ok) {
-        throw new Error(data.error || "Auth failed");
+        const fallback =
+          rawText && !rawText.trim().startsWith("<")
+            ? rawText
+            : `Auth failed (${res.status})`;
+        throw new Error(data.error || fallback);
       }
       setUserToken(data.token);
       setUser(data.user);

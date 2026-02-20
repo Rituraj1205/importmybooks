@@ -13,10 +13,19 @@ import ExcelJS from "exceljs";
 
 const app = express();
 app.use(express.json());
-const allowedOrigins = new Set([
+const defaultAllowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-]);
+  "http://localhost:5175",
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5174",
+  "http://127.0.0.1:5175",
+];
+const envAllowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedOrigins = new Set([...defaultAllowedOrigins, ...envAllowedOrigins]);
 
 app.use(
   cors({
@@ -34,6 +43,7 @@ app.use(
 const PORT = process.env.PORT || 3001;
 const CLIENT_ID = process.env.XERO_CLIENT_ID;
 const REDIRECT_URI = process.env.XERO_REDIRECT_URI;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const SCOPES =
   process.env.XERO_SCOPES ||
   "openid profile email accounting.transactions accounting.settings accounting.contacts offline_access";
@@ -289,7 +299,24 @@ const EXPORT_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
 const jobStore = new Map();
 const jobQueue = [];
 let activeJobs = 0;
-const MAX_CONCURRENT_JOBS = 1;
+const parsePositiveInt = (value, fallback) => {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+const MAX_CONCURRENT_JOBS = parsePositiveInt(
+  process.env.MAX_CONCURRENT_EXPORT_JOBS,
+  3
+);
+const MAX_CONCURRENT_JOBS_PER_USER = parsePositiveInt(
+  process.env.MAX_CONCURRENT_EXPORT_JOBS_PER_USER,
+  1
+);
+const activeJobsByUser = new Map();
+
+function getJobOwnerKey(job) {
+  if (!job) return "unknown";
+  return job.userId || job.userEmail || "unknown";
+}
 
 function ensureExportDir(folder = EXPORT_DIR) {
   if (!fs.existsSync(folder)) {
@@ -624,20 +651,36 @@ async function processJob(job) {
 
 function processQueue() {
   while (activeJobs < MAX_CONCURRENT_JOBS) {
-    const jobId = jobQueue.shift();
-    if (!jobId) return;
+    const nextIndex = jobQueue.findIndex((jobId) => {
+      const queuedJob = jobStore.get(jobId);
+      if (!queuedJob || queuedJob.status !== "queued") return false;
+      const ownerKey = getJobOwnerKey(queuedJob);
+      const ownerActive = activeJobsByUser.get(ownerKey) || 0;
+      return ownerActive < MAX_CONCURRENT_JOBS_PER_USER;
+    });
+    if (nextIndex === -1) return;
+
+    const [jobId] = jobQueue.splice(nextIndex, 1);
     const job = jobStore.get(jobId);
-    if (!job || job.status !== "queued") {
-      continue;
-    }
+    if (!job || job.status !== "queued") continue;
+
+    const ownerKey = getJobOwnerKey(job);
+    const ownerActive = activeJobsByUser.get(ownerKey) || 0;
     activeJobs += 1;
+    activeJobsByUser.set(ownerKey, ownerActive + 1);
+
     processJob(job)
       .catch((err) => console.error("Job processing failed:", err))
       .finally(() => {
         activeJobs -= 1;
+        const activeForOwner = activeJobsByUser.get(ownerKey) || 0;
+        if (activeForOwner <= 1) {
+          activeJobsByUser.delete(ownerKey);
+        } else {
+          activeJobsByUser.set(ownerKey, activeForOwner - 1);
+        }
         processQueue();
       });
-    return;
   }
 }
 
@@ -3528,7 +3571,9 @@ app.get("/auth/callback", async (req, res) => {
     latestSession = { sessionId, createdAt: Date.now() };
     saveSessions();
 
-    res.redirect(`http://localhost:5173/?sessionId=${sessionId}`);
+    const redirectTarget = new URL(FRONTEND_URL);
+    redirectTarget.searchParams.set("sessionId", sessionId);
+    res.redirect(redirectTarget.toString());
   } catch (err) {
     console.error("Backend callback error:", err);
     res.status(500).send("Auth failed");
@@ -3675,6 +3720,22 @@ app.post("/api/export/start", async (req, res) => {
     }
     if (!isTypeAllowed(type)) {
       return res.status(403).json({ error: "Type not allowed. Contact admin." });
+    }
+
+    const hasActiveOtherTenantJob = Array.from(jobStore.values()).some((job) => {
+      const isOwner =
+        job.userId === userData.user.id ||
+        (job.userEmail && job.userEmail === userData.user.email);
+      if (!isOwner) return false;
+      const isActive = job.status === "queued" || job.status === "running";
+      if (!isActive) return false;
+      return job.tenantId && job.tenantId !== tenantId;
+    });
+    if (hasActiveOtherTenantJob) {
+      return res.status(409).json({
+        error:
+          "You already have an active export for another tenant. Wait for it to finish or clear history.",
+      });
     }
 
     const job = {
