@@ -1,7 +1,7 @@
 {
-  "maxUsers": 7,
-  "adminPasswordHash": "fQNcFvV7qdXs26sctvAehf11V9ChL856yeOt8jscV6s/7bNSv14OtJTCPVPMbD4WzYuo0GSLHXp1GAerV2HmnA==",
-  "adminPasswordSalt": "3e1164d7600ef2233e7dd4e32daffa1f",
+  "maxUsers": 6,
+  "adminPasswordHash": "nEuOxMKMujTyk2HCh7jQ6vF96tV2x9MX7ryJgY7tFLKDd+tfZQrtc0kihNnIZ68D70LCIPcbykQtj6gKzKQmlA==",
+  "adminPasswordSalt": "8bf12a820f589610aef2633fe38b312c",
   "allowedTypes": [
     "Invoice PAID",
     "Invoice AUTHORISED",
@@ -37,5 +37,8 @@
     "Items",
     "Chart of Accounts"
   ],
-  "deniedTypes": []
+  "deniedTypes": [],
+  "maintenanceMode": false,
+  "maintenanceBanner": "",
+  "broadcastMessage": ""
 }
