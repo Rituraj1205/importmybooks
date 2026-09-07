@@ -705,7 +705,7 @@ const PLAN_CONFIG = {
   starter: {
     maxRowsPerImport: null,
     maxOrgs: 1,
-    dailyApiCalls: 1000,
+    dailyApiCallsPerOrg: 1000,
     allowedImportTypes: ALL_PAID_IMPORT_TYPES,
     exportAccess: false,
     deleteAccess: false,
@@ -719,7 +719,7 @@ const PLAN_CONFIG = {
   professional: {
     maxRowsPerImport: null,
     maxOrgs: 5,
-    dailyApiCalls: 5000,
+    dailyApiCallsPerOrg: 1000,
     allowedImportTypes: ALL_PAID_IMPORT_TYPES,
     exportAccess: true,
     deleteAccess: true,
@@ -733,7 +733,7 @@ const PLAN_CONFIG = {
   growth: {
     maxRowsPerImport: null,
     maxOrgs: 15,
-    dailyApiCalls: 15000,
+    dailyApiCallsPerOrg: 1000,
     allowedImportTypes: ALL_PAID_IMPORT_TYPES,
     exportAccess: true,
     deleteAccess: true,
@@ -747,7 +747,7 @@ const PLAN_CONFIG = {
   enterprise: {
     maxRowsPerImport: null,
     maxOrgs: null,
-    dailyApiCalls: null,
+    dailyApiCallsPerOrg: 1000,
     allowedImportTypes: ALL_PAID_IMPORT_TYPES,
     exportAccess: true,
     deleteAccess: true,
@@ -762,7 +762,7 @@ const PLAN_CONFIG = {
     maxRowsPerImport: null,
     maxTotalRows: 100,
     maxOrgs: 1,
-    dailyApiCalls: 200,
+    dailyApiCallsPerOrg: 1000,
     allowedImportTypes: ["bills", "invoices", "spend-money", "receive-money", "accounts", "customers", "vendors"],
     exportAccess: false,
     deleteAccess: false,
@@ -777,7 +777,7 @@ const PLAN_CONFIG = {
     maxRowsPerImport: 0,
     maxTotalRows: 0,
     maxOrgs: 0,
-    dailyApiCalls: 0,
+    dailyApiCallsPerOrg: 0,
     allowedImportTypes: [],
     exportAccess: false,
     deleteAccess: false,

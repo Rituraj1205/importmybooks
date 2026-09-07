@@ -61,11 +61,11 @@ const PAID_PLANS = [
     highlight: false,
     cta: "Get Started",
     orgs: "1 org",
-    apiCalls: "1,000 API calls/day",
+    apiCalls: "1,000 calls/day",
     features: [
       "1 Xero organisation — 1,000 API calls/day",
       "All 17+ import types included (Invoices, Bills, Credit Notes, Contacts, Items, Payments, POs, Quotes, Manual Journals, Overpayments & more)",
-      "No row limit per import — import as much as your daily API quota allows",
+      "No row limit — import as many records as your 1,000 daily API calls allow",
       "Smart Import Guide + CSV templates for every import type",
       "Error CSV download — see exactly which rows failed and why",
       "Import History (3 months)",
@@ -92,11 +92,11 @@ const PAID_PLANS = [
     cardClass: "pricing-card--pro",
     cta: "Get Started",
     orgs: "5 orgs",
-    apiCalls: "5,000 API calls/day",
+    apiCalls: "1,000 calls/day each",
     features: [
-      "Up to 5 Xero organisations — 5,000 API calls/day combined",
+      "Up to 5 Xero organisations — 1,000 API calls/day per org",
       "All 17+ import types — everything in Starter, plus full access",
-      "No row limit per import",
+      "No row limit — import as many records as each org's 1,000 daily calls allow",
       "Auto Allocation — Credit Notes → Invoices, Debit Notes → Bills, Overpayments → invoices in bulk",
       "Delete Centre — 9 types: Invoice/Bill Void, Payment Delete, Quote, PO, Spend/Receive, Bank Transfer, Contact Archive",
       "Update Centre — Bulk Status, Exchange Rate, update existing records",
@@ -124,11 +124,11 @@ const PAID_PLANS = [
     highlight: false,
     cta: "Get Started",
     orgs: "15 orgs",
-    apiCalls: "15,000 API calls/day",
+    apiCalls: "1,000 calls/day each",
     features: [
-      "Up to 15 Xero organisations — 15,000 API calls/day combined",
+      "Up to 15 Xero organisations — 1,000 API calls/day per org",
       "All 17+ import types — no restrictions",
-      "No row limit per import",
+      "No row limit — import as many records as each org's 1,000 daily calls allow",
       "Everything in Professional (Auto Allocation, Delete, Update)",
       "Multi-user access with RBAC (4 roles: import / export / delete / allocation)",
       "Partial import — skip errors, continue the rest automatically",
@@ -156,10 +156,10 @@ const PAID_PLANS = [
     highlight: false,
     cta: "Contact Sales",
     orgs: "Unlimited",
-    apiCalls: "Unlimited",
+    apiCalls: "1,000 calls/day each",
     features: [
       "Unlimited Xero organisations",
-      "Unlimited API calls — no daily cap enforced by us",
+      "1,000 API calls/day per org — no org limit means unlimited total daily capacity",
       "All 17+ import types, no row limits",
       "Everything in Growth (Auto Allocation, Delete, Update, RBAC)",
       "Dedicated account manager",
@@ -173,8 +173,8 @@ const PAID_PLANS = [
 ];
 
 const COMPARE_ROWS = [
-  { label: "Xero organisations",          values: ["1",        "5",          "15",         "Unlimited"] },
-  { label: "API calls / day",             values: ["1,000",    "5,000",      "15,000",     "Unlimited"] },
+  { label: "Xero organisations",          values: ["1",        "Up to 5",    "Up to 15",   "Unlimited"] },
+  { label: "API calls / day (per org)",   values: ["1,000",    "1,000",      "1,000",      "1,000"]     },
   { label: "All 17+ import types",        values: [true,       true,         true,         true]        },
   { label: "No row limit per import",     values: [true,       true,         true,         true]        },
   { label: "Auto Allocation engine",      values: [false,      true,         true,         true]        },
@@ -191,7 +191,7 @@ const COMPARE_ROWS = [
 const FAQ = [
   {
     q: "How many records can I import per day? What is the Xero API limit?",
-    a: "Xero allows 1,000 API calls per day per organisation. ImportMyBooks batches multiple records into each API call — so the effective import capacity is much higher: ~40,000 invoices or bills per day (50 records per call), ~80,000 contacts or items per day (100 records per call). The tool shows your live remaining quota and auto-pauses if you hit the limit — resuming at midnight UTC automatically. No data is lost. Professional (5 orgs) and Growth (15 orgs) plans multiply this daily capacity across all connected orgs.",
+    a: "Xero allows 1,000 API calls per day per organisation. ImportMyBooks batches multiple records into each API call — so the effective import capacity is much higher: ~40,000 invoices or bills per day (50 records per call), ~80,000 contacts or items per day (100 records per call). The tool shows your live remaining quota and auto-pauses if you hit the limit — resuming at midnight UTC automatically. No data is lost. Every plan gets 1,000 calls/day per org — Professional (up to 5 orgs) and Growth (up to 15 orgs) give you more orgs, so more total daily capacity across clients.",
   },
   {
     q: "What is the Testing plan and how do I get it?",
@@ -596,14 +596,14 @@ export default function Pricing({ onBack, userToken }) {
               How do API calls work? How much data can I import per day?
             </div>
             <div style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.72 }}>
-              Xero allows <strong>1,000 API calls per day per organisation</strong> (at our app tier). ImportMyBooks batches
-              multiple records into each API call — so you can import far more than 1,000 records per day.
+              Xero allows <strong>1,000 API calls per day per organisation</strong>. ImportMyBooks batches
+              multiple records into each API call — so you can import far more than 1,000 records per day per org.
               Your daily quota resets at <strong>midnight UTC</strong> automatically — the tool pauses when you hit the limit
-              and resumes the next day. No data is lost. Professional (5 orgs) and Growth (15 orgs) plans
-              multiply your daily capacity across all connected orgs.
+              and resumes the next day with no data lost.
               <br /><br />
-              <strong>All 17+ import types are available on every paid plan.</strong> The plan you choose controls
-              how many orgs you connect and which power tools you get — not which import types.
+              <strong>All 17+ import types are available on every paid plan.</strong> What changes between plans is
+              how many Xero orgs you can connect — each org independently gets its own 1,000 calls/day —
+              plus which power tools (Auto Allocation, Delete Centre, Team Access) you unlock.
             </div>
           </div>
         </div>
