@@ -56,30 +56,26 @@ const PAID_PLANS = [
     accent: "#fbbf24",
     accentDim: "rgba(251,191,36,0.1)",
     accentBorder: "rgba(251,191,36,0.28)",
-    tagline: "Solo accountants & small practices",
+    tagline: "Solo accountants & freelancers",
     badge: null,
     highlight: false,
     cta: "Get Started",
+    orgs: "1 org",
+    apiCalls: "1,000 API calls/day",
     features: [
-      "1 Xero organisation",
-      "Up to 1,000 records per import",
-      "Invoices, Bills & Credit Notes (AR + AP)",
-      "Quotes & Purchase Orders",
-      "Invoice & Bill Payments",
-      "Spend & Receive Money (Bank Transactions)",
-      "Contacts (Customers & Vendors)",
-      "Items / Products & Chart of Accounts",
-      "Smart Import Guide + Template downloads",
-      "Error CSV download after each import",
+      "1 Xero organisation — 1,000 API calls/day",
+      "All 17+ import types included (Invoices, Bills, Credit Notes, Contacts, Items, Payments, POs, Quotes, Manual Journals, Overpayments & more)",
+      "No row limit per import — import as much as your daily API quota allows",
+      "Smart Import Guide + CSV templates for every import type",
+      "Error CSV download — see exactly which rows failed and why",
       "Import History (3 months)",
       "Email support (48h response)",
     ],
     notIncluded: [
-      "Auto Allocation engine",
-      "Delete Centre (9 delete types)",
-      "Update Centre (bulk status, exchange rate)",
-      "Manual Journals & Bank Transfers import",
-      "Multi-user team access",
+      "Auto Allocation (match Credit Notes ↔ Invoices in bulk)",
+      "Delete Centre (bulk void/delete 9 record types)",
+      "Update Centre (bulk status & exchange rate updates)",
+      "Multi-user team access & RBAC",
     ],
   },
   {
@@ -95,22 +91,23 @@ const PAID_PLANS = [
     highlight: true,
     cardClass: "pricing-card--pro",
     cta: "Get Started",
+    orgs: "5 orgs",
+    apiCalls: "5,000 API calls/day",
     features: [
-      "Up to 5 Xero organisations",
-      "Up to 10,000 records per import",
-      "All 17+ import types (incl. Manual Journals, Bank Transfers, Overpayments)",
-      "Auto Allocation — Credit Notes → Invoices, Debit Notes → Bills, Overpayments",
-      "Delete Centre — 9 types: Invoice/Bill Void, Payment Delete, Quote Delete, PO Delete, Spend/Receive Delete, Bank Transfer Delete, Contact Archive",
-      "Update Centre — Bulk Status Update, Exchange Rate Update, Update existing records",
+      "Up to 5 Xero organisations — 5,000 API calls/day combined",
+      "All 17+ import types — everything in Starter, plus full access",
+      "No row limit per import",
+      "Auto Allocation — Credit Notes → Invoices, Debit Notes → Bills, Overpayments → invoices in bulk",
+      "Delete Centre — 9 types: Invoice/Bill Void, Payment Delete, Quote, PO, Spend/Receive, Bank Transfer, Contact Archive",
+      "Update Centre — Bulk Status, Exchange Rate, update existing records",
+      "Xero Pre-Validation (catch errors before import hits Xero)",
       "Overpayment Duplicate Finder & Void",
-      "Xero Pre-Validation (catch errors before import)",
-      "Smart Import Guide with per-type rules & tips",
       "Import History (12 months)",
       "Priority support (24h response)",
     ],
     notIncluded: [
       "Multi-user team access & RBAC",
-      "Partial import & resume support",
+      "Partial import & Import Resume",
       "Admin dashboard & team analytics",
     ],
   },
@@ -126,22 +123,25 @@ const PAID_PLANS = [
     badgeClass: "pricing-badge--new",
     highlight: false,
     cta: "Get Started",
+    orgs: "15 orgs",
+    apiCalls: "15,000 API calls/day",
     features: [
-      "Up to 15 Xero organisations",
-      "Unlimited records per import",
-      "Everything in Professional",
-      "Multi-user access with RBAC (4 permission levels: import / export / delete / allocation)",
-      "Partial import — skip errors, continue rest automatically",
+      "Up to 15 Xero organisations — 15,000 API calls/day combined",
+      "All 17+ import types — no restrictions",
+      "No row limit per import",
+      "Everything in Professional (Auto Allocation, Delete, Update)",
+      "Multi-user access with RBAC (4 roles: import / export / delete / allocation)",
+      "Partial import — skip errors, continue the rest automatically",
       "Import Resume — continue interrupted jobs from where they stopped",
-      "Auto-Fix — one-click correction of common import errors",
+      "Auto-Fix — one-click fix for common import errors",
       "Import Notes & full audit trail per import",
-      "Browser notifications (get alerted when large imports finish)",
+      "Browser notifications when large imports complete",
       "Advanced admin dashboard with team analytics",
       "Priority support (12h response)",
     ],
     notIncluded: [
       "Dedicated account manager",
-      "Custom SLA & onboarding",
+      "Custom SLA & onboarding session",
     ],
   },
   {
@@ -155,10 +155,13 @@ const PAID_PLANS = [
     badge: null,
     highlight: false,
     cta: "Contact Sales",
+    orgs: "Unlimited",
+    apiCalls: "Unlimited",
     features: [
       "Unlimited Xero organisations",
-      "Unlimited records per import",
-      "Everything in Growth",
+      "Unlimited API calls — no daily cap enforced by us",
+      "All 17+ import types, no row limits",
+      "Everything in Growth (Auto Allocation, Delete, Update, RBAC)",
       "Dedicated account manager",
       "Custom onboarding & team training session",
       "SLA-backed support (4h response guarantee)",
@@ -170,24 +173,29 @@ const PAID_PLANS = [
 ];
 
 const COMPARE_ROWS = [
-  { label: "Xero organisations",          values: ["1",    "5",        "15",       "Unlimited"] },
-  { label: "Records per import",          values: ["1,000","Up to 10,000","Unlimited","Unlimited"] },
-  { label: "Import types",                values: ["12",   "All 17+",  "All 17+",  "All 17+"]  },
-  { label: "Auto Allocation engine",      values: [false,  true,       true,       true]        },
-  { label: "Delete Centre (9 types)",     values: [false,  true,       true,       true]        },
-  { label: "Update Centre",              values: [false,  true,       true,       true]        },
-  { label: "Xero Pre-Validation",        values: [false,  true,       true,       true]        },
-  { label: "Multi-user RBAC",            values: [false,  false,      true,       true]        },
-  { label: "Partial import & resume",    values: [false,  false,      true,       true]        },
-  { label: "Auto-Fix + Import Notes",    values: [false,  false,      true,       true]        },
-  { label: "Admin dashboard",            values: [false,  false,      true,       true]        },
-  { label: "Dedicated manager",          values: [false,  false,      false,      true]        },
+  { label: "Xero organisations",          values: ["1",        "5",          "15",         "Unlimited"] },
+  { label: "API calls / day",             values: ["1,000",    "5,000",      "15,000",     "Unlimited"] },
+  { label: "All 17+ import types",        values: [true,       true,         true,         true]        },
+  { label: "No row limit per import",     values: [true,       true,         true,         true]        },
+  { label: "Auto Allocation engine",      values: [false,      true,         true,         true]        },
+  { label: "Delete Centre (9 types)",     values: [false,      true,         true,         true]        },
+  { label: "Update Centre",               values: [false,      true,         true,         true]        },
+  { label: "Xero Pre-Validation",         values: [false,      true,         true,         true]        },
+  { label: "Multi-user RBAC",             values: [false,      false,        true,         true]        },
+  { label: "Partial import & resume",     values: [false,      false,        true,         true]        },
+  { label: "Auto-Fix + Import Notes",     values: [false,      false,        true,         true]        },
+  { label: "Import History",              values: ["3 months", "12 months",  "Unlimited",  "Unlimited"] },
+  { label: "Dedicated manager",           values: [false,      false,        false,        true]        },
 ];
 
 const FAQ = [
   {
+    q: "How many records can I import per day? What is the Xero API limit?",
+    a: "Xero allows 1,000 API calls per day per organisation. ImportMyBooks batches multiple records into each API call — so the effective import capacity is much higher: ~40,000 invoices or bills per day (50 records per call), ~80,000 contacts or items per day (100 records per call). The tool shows your live remaining quota and auto-pauses if you hit the limit — resuming at midnight UTC automatically. No data is lost. Professional (5 orgs) and Growth (15 orgs) plans multiply this daily capacity across all connected orgs.",
+  },
+  {
     q: "What is the Testing plan and how do I get it?",
-    a: "The Testing plan is completely free and lets you import up to 100 rows total across all imports. Create an account, then request the Testing plan from within the app. An admin reviews and approves your request — you'll receive a notification in your dashboard once approved.",
+    a: "The Testing plan is completely free and lets you import up to 100 rows total across all imports. Create an account, then request the Testing plan from within the app. An admin reviews and approves your request — approval typically happens within 24 hours. You'll receive a notification in your dashboard once approved.",
   },
   {
     q: "Is there a free trial for paid plans?",
@@ -214,8 +222,8 @@ const FAQ = [
     a: "Your financial data is never stored on our servers — it passes directly to the Xero API in transit. Xero OAuth tokens are encrypted at rest and never exposed to the browser.",
   },
   {
-    q: "What import types are included in 'All 17+'?",
-    a: "Bills, Invoices, Credit Notes (AR & AP), Debit Notes, Invoice Payments, Bill Payments, Manual Journals, Bank Transfers, Purchase Orders, Quotes, Spend Money, Receive Money, Overpayments, Prepayments, Contacts (Customers & Vendors), Items / Products, and Chart of Accounts.",
+    q: "Which import types are included? Does it differ by plan?",
+    a: "All 17+ import types are included on every paid plan — Starter, Professional, Growth, and Enterprise. There is no type restriction by plan. The types are: Invoices, Bills, Credit Notes (AR & AP), Debit Notes, Invoice Payments, Bill Payments, Manual Journals, Bank Transfers, Purchase Orders, Quotes, Spend Money, Receive Money, Overpayments, Prepayments, Contacts (Customers & Vendors), Items / Products, and Chart of Accounts. The plan controls how many Xero orgs you can connect (and therefore how many API calls/day you get), plus which power tools are available (Auto Allocation, Delete Centre, Update Centre).",
   },
   {
     q: "What is Xero Pre-Validation?",
@@ -368,8 +376,9 @@ export default function Pricing({ onBack, userToken }) {
           <p className="pricing-eyebrow">Transparent Pricing · No Surprises</p>
           <h1>The most complete Xero import tool<br />on the market.</h1>
           <p className="pricing-sub">
-            15+ import types · Auto Allocation · Bulk Delete · Multi-tenant command centre.
-            Start free, scale as you grow.
+            All 17+ import types on every plan. Plans differ by how many Xero orgs you need
+            and which power tools (Auto Allocation, Delete Centre, Team Access) you want.
+            Start free — scale as you grow.
           </p>
 
           {/* Trust badges */}
@@ -513,6 +522,27 @@ export default function Pricing({ onBack, userToken }) {
               </div>
               <div className="pricing-card__annual">{getNote(plan.id)}</div>
 
+              {/* API calls stat */}
+              {plan.orgs && (
+                <div style={{
+                  display: "flex", gap: 8, margin: "12px 0",
+                  padding: "10px 14px",
+                  background: plan.accentDim,
+                  border: `1px solid ${plan.accentBorder}`,
+                  borderRadius: 10,
+                }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 2 }}>Xero orgs</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: plan.accent }}>{plan.orgs}</div>
+                  </div>
+                  <div style={{ width: 1, background: plan.accentBorder, flexShrink: 0 }} />
+                  <div style={{ flex: 2, paddingLeft: 8 }}>
+                    <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 2 }}>API calls / day</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: plan.accent }}>{plan.apiCalls}</div>
+                  </div>
+                </div>
+              )}
+
               {/* CTA */}
               <button
                 type="button"
@@ -551,6 +581,74 @@ export default function Pricing({ onBack, userToken }) {
             </div>
           );
         })}
+      </div>
+
+      {/* ─── API Quota callout ─── */}
+      <div style={{
+        maxWidth: 960, margin: "0 auto 32px", padding: "22px 28px",
+        background: "rgba(45,212,191,0.05)", border: "1px solid rgba(45,212,191,0.18)",
+        borderRadius: 16,
+      }}>
+        <div style={{ display: "flex", gap: 14, alignItems: "flex-start", marginBottom: 18 }}>
+          <div style={{ fontSize: 26, flexShrink: 0 }}>⚡</div>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 5 }}>
+              How do API calls work? How much data can I import per day?
+            </div>
+            <div style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.72 }}>
+              Xero allows <strong>1,000 API calls per day per organisation</strong> (at our app tier). ImportMyBooks batches
+              multiple records into each API call — so you can import far more than 1,000 records per day.
+              Your daily quota resets at <strong>midnight UTC</strong> automatically — the tool pauses when you hit the limit
+              and resumes the next day. No data is lost. Professional (5 orgs) and Growth (15 orgs) plans
+              multiply your daily capacity across all connected orgs.
+              <br /><br />
+              <strong>All 17+ import types are available on every paid plan.</strong> The plan you choose controls
+              how many orgs you connect and which power tools you get — not which import types.
+            </div>
+          </div>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5 }}>
+            <thead>
+              <tr>
+                {["Import Type", "Records per API call", "~Records per day (1 org)", "Example"].map((h, i) => (
+                  <th key={h} style={{
+                    padding: "8px 14px", textAlign: i === 0 ? "left" : "center",
+                    color: "var(--muted)", fontWeight: 700, fontSize: 11,
+                    letterSpacing: ".04em", textTransform: "uppercase",
+                    borderBottom: "1px solid var(--border)", whiteSpace: "nowrap",
+                  }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ["Invoices", "50 per call", "~40,000", "1,000 invoices ≈ 21 API calls"],
+                ["Bills", "50 per call", "~40,000", "500 bills ≈ 11 API calls"],
+                ["Credit Notes", "50 per call", "~40,000", "200 credit notes ≈ 5 API calls"],
+                ["Spend / Receive Money", "100 per call", "~80,000", "1,000 transactions ≈ 11 API calls"],
+                ["Contacts", "100 per call", "~80,000", "500 contacts ≈ 6 API calls"],
+                ["Items", "100 per call", "~80,000", "300 items ≈ 4 API calls"],
+              ].map(([type, perCall, perDay, example], ri) => (
+                <tr key={type}>
+                  {[type, perCall, perDay, example].map((v, ci) => (
+                    <td key={ci} style={{
+                      padding: "9px 14px",
+                      textAlign: ci === 0 ? "left" : "center",
+                      fontSize: 12.5,
+                      color: ci === 2 ? "var(--accent)" : "var(--muted)",
+                      fontWeight: ci === 2 ? 700 : ci === 0 ? 600 : 400,
+                      borderBottom: ri < 5 ? "1px solid var(--border)" : "none",
+                    }}>{v}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 14, opacity: 0.7 }}>
+          * ~200 calls reserved for duplicate scans and Xero lookups. Professional (5 orgs) &amp; Growth (15 orgs) plans multiply daily capacity across orgs.
+        </div>
       </div>
 
       {/* ─── Feature comparison ─── */}

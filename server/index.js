@@ -691,37 +691,39 @@ function getUserFromToken(token) {
 }
 
 // ── Plan Configuration ──────────────────────────────────────────────────────
+// All types available to every paid plan — plan differentiates on features (delete, allocation, team), not import types
+const ALL_PAID_IMPORT_TYPES = [
+  "bills", "invoices", "credit-notes", "credit-note-refunds",
+  "spend-money", "receive-money", "bill-payments", "invoice-payments",
+  "manual-journals", "spend-overpayments", "receive-overpayments",
+  "spend-alloc", "receive-alloc",
+  "accounts", "items", "customers", "vendors", "tracking-categories",
+  "purchase-orders", "quotes",
+];
+
 const PLAN_CONFIG = {
   starter: {
-    maxRowsPerImport: 1000,
+    maxRowsPerImport: null,
     maxOrgs: 1,
-    allowedImportTypes: ["bills", "invoices", "spend-money", "receive-money", "accounts", "customers", "vendors", "tracking-categories"],
+    dailyApiCalls: 1000,
+    allowedImportTypes: ALL_PAID_IMPORT_TYPES,
     exportAccess: false,
     deleteAccess: false,
-    manualJournalsAccess: false,
-    paymentImportAccess: false,
-    overpaymentAccess: false,
-    purchaseOrdersAccess: false,
-    quotesAccess: false,
-  },
-  professional: {
-    maxRowsPerImport: 10000,
-    maxOrgs: 5,
-    allowedImportTypes: ["bills", "invoices", "credit-notes", "credit-note-refunds", "spend-money", "receive-money", "bill-payments", "invoice-payments", "manual-journals", "accounts", "items", "customers", "vendors", "tracking-categories", "purchase-orders", "quotes"],
-    exportAccess: true,
-    deleteAccess: true,
+    autoAllocationAccess: false,
     manualJournalsAccess: true,
     paymentImportAccess: true,
-    overpaymentAccess: false,
+    overpaymentAccess: true,
     purchaseOrdersAccess: true,
     quotesAccess: true,
   },
-  enterprise: {
+  professional: {
     maxRowsPerImport: null,
-    maxOrgs: null,
-    allowedImportTypes: ["bills", "invoices", "credit-notes", "credit-note-refunds", "spend-money", "receive-money", "bill-payments", "invoice-payments", "manual-journals", "spend-overpayments", "receive-overpayments", "spend-alloc", "receive-alloc", "accounts", "items", "customers", "vendors", "tracking-categories", "purchase-orders", "quotes"],
+    maxOrgs: 5,
+    dailyApiCalls: 5000,
+    allowedImportTypes: ALL_PAID_IMPORT_TYPES,
     exportAccess: true,
     deleteAccess: true,
+    autoAllocationAccess: true,
     manualJournalsAccess: true,
     paymentImportAccess: true,
     overpaymentAccess: true,
@@ -731,9 +733,25 @@ const PLAN_CONFIG = {
   growth: {
     maxRowsPerImport: null,
     maxOrgs: 15,
-    allowedImportTypes: ["bills", "invoices", "credit-notes", "credit-note-refunds", "spend-money", "receive-money", "bill-payments", "invoice-payments", "manual-journals", "spend-overpayments", "receive-overpayments", "spend-alloc", "receive-alloc", "accounts", "items", "customers", "vendors", "tracking-categories", "purchase-orders", "quotes"],
+    dailyApiCalls: 15000,
+    allowedImportTypes: ALL_PAID_IMPORT_TYPES,
     exportAccess: true,
     deleteAccess: true,
+    autoAllocationAccess: true,
+    manualJournalsAccess: true,
+    paymentImportAccess: true,
+    overpaymentAccess: true,
+    purchaseOrdersAccess: true,
+    quotesAccess: true,
+  },
+  enterprise: {
+    maxRowsPerImport: null,
+    maxOrgs: null,
+    dailyApiCalls: null,
+    allowedImportTypes: ALL_PAID_IMPORT_TYPES,
+    exportAccess: true,
+    deleteAccess: true,
+    autoAllocationAccess: true,
     manualJournalsAccess: true,
     paymentImportAccess: true,
     overpaymentAccess: true,
@@ -744,9 +762,11 @@ const PLAN_CONFIG = {
     maxRowsPerImport: null,
     maxTotalRows: 100,
     maxOrgs: 1,
+    dailyApiCalls: 200,
     allowedImportTypes: ["bills", "invoices", "spend-money", "receive-money", "accounts", "customers", "vendors"],
     exportAccess: false,
     deleteAccess: false,
+    autoAllocationAccess: false,
     manualJournalsAccess: false,
     paymentImportAccess: false,
     overpaymentAccess: false,
@@ -757,9 +777,11 @@ const PLAN_CONFIG = {
     maxRowsPerImport: 0,
     maxTotalRows: 0,
     maxOrgs: 0,
+    dailyApiCalls: 0,
     allowedImportTypes: [],
     exportAccess: false,
     deleteAccess: false,
+    autoAllocationAccess: false,
     manualJournalsAccess: false,
     paymentImportAccess: false,
     overpaymentAccess: false,
@@ -784,6 +806,7 @@ function getUserPlanLimits(user) {
   if (Array.isArray(c.allowedImportTypes)) merged.allowedImportTypes = c.allowedImportTypes;
   if (typeof c.exportAccess === "boolean") merged.exportAccess = c.exportAccess;
   if (typeof c.deleteAccess === "boolean") merged.deleteAccess = c.deleteAccess;
+  if (typeof c.autoAllocationAccess === "boolean") merged.autoAllocationAccess = c.autoAllocationAccess;
   if (typeof c.manualJournalsAccess === "boolean") merged.manualJournalsAccess = c.manualJournalsAccess;
   if (typeof c.paymentImportAccess === "boolean") merged.paymentImportAccess = c.paymentImportAccess;
   if (typeof c.overpaymentAccess === "boolean") merged.overpaymentAccess = c.overpaymentAccess;
@@ -4173,7 +4196,7 @@ app.post("/api/admin/users/:id/set-custom-limits", (req, res) => {
     if (customLimits.maxOrgs === null) cl.maxOrgs = null;
     else if (typeof customLimits.maxOrgs === "number" && customLimits.maxOrgs > 0) cl.maxOrgs = Math.floor(customLimits.maxOrgs);
     if (Array.isArray(customLimits.allowedImportTypes)) cl.allowedImportTypes = customLimits.allowedImportTypes.filter((t) => typeof t === "string");
-    const boolFields = ["exportAccess", "deleteAccess", "manualJournalsAccess", "paymentImportAccess", "overpaymentAccess", "purchaseOrdersAccess", "quotesAccess"];
+    const boolFields = ["exportAccess", "deleteAccess", "autoAllocationAccess", "manualJournalsAccess", "paymentImportAccess", "overpaymentAccess", "purchaseOrdersAccess", "quotesAccess"];
     for (const f of boolFields) {
       if (typeof customLimits[f] === "boolean") cl[f] = customLimits[f];
     }
@@ -17999,7 +18022,7 @@ app.post("/api/user/signup-with-payment", async (req, res) => {
   const permissions = ["import",
     ...(planConfig.exportAccess ? ["export"] : []),
     ...(planConfig.deleteAccess ? ["delete"] : []),
-    ...(planConfig.overpaymentAccess ? ["allocation"] : []),
+    ...(planConfig.autoAllocationAccess ? ["allocation"] : []),
   ];
   const now = new Date();
   const newUser = {

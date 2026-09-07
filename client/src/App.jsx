@@ -2908,9 +2908,16 @@ function App() {
       }));
       const validationErrors = parsedRows.flatMap(row => {
         const errs = [];
+        if (row.poNumber && isSciNotation(row.poNumber)) errs.push(`Row ${row.rowNumber}: PO Number "${row.poNumber}" is in scientific notation — Excel converted it from a large number. In Excel, select the PO Number column → Format Cells → Text → re-save as CSV.`);
         if (!row.contactName) errs.push(`Row ${row.rowNumber}: Contact Name is required.`);
-        if (!row.unitAmount) errs.push(`Row ${row.rowNumber}: Unit Amount is required.`);
+        if (row.date && !isLikelyDate(row.date)) errs.push(`Row ${row.rowNumber}: Date "${row.date}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
+        if (row.deliveryDate && !isLikelyDate(row.deliveryDate)) errs.push(`Row ${row.rowNumber}: Delivery Date "${row.deliveryDate}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
+        const _poUa = String(row.unitAmount || "").trim();
+        if (!_poUa || !isValidNum(row.unitAmount)) errs.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number.`);
         if (!row.accountCode) errs.push(`Row ${row.rowNumber}: Account Code is required.`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+        if (row.exchangeRate && !isValidNum(row.exchangeRate)) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+        if (row.taxAmount && !isValidNum(row.taxAmount)) errs.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
         return errs;
       });
       setPoImportRows(parsedRows);
@@ -3163,9 +3170,17 @@ function App() {
       }));
       const validationErrors = parsedRows.flatMap(row => {
         const errs = [];
+        if (row.quoteNumber && isSciNotation(row.quoteNumber)) errs.push(`Row ${row.rowNumber}: Quote Number "${row.quoteNumber}" is in scientific notation — Excel converted it from a large number. In Excel, select the Quote Number column → Format Cells → Text → re-save as CSV.`);
         if (!row.contactName) errs.push(`Row ${row.rowNumber}: Contact Name is required.`);
-        if (!row.unitAmount) errs.push(`Row ${row.rowNumber}: Unit Amount is required.`);
+        if (row.date && !isLikelyDate(row.date)) errs.push(`Row ${row.rowNumber}: Date "${row.date}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
+        if (row.expiryDate && !isLikelyDate(row.expiryDate)) errs.push(`Row ${row.rowNumber}: Expiry Date "${row.expiryDate}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
+        const _qUa = String(row.unitAmount || "").trim();
+        if (!_qUa || !isValidNum(row.unitAmount)) errs.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number.`);
         if (!row.accountCode) errs.push(`Row ${row.rowNumber}: Account Code is required.`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+        if (row.exchangeRate && !isValidNum(row.exchangeRate)) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+        if (row.taxAmount && !isValidNum(row.taxAmount)) errs.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
+        if (row.discountRate && !isValidNum(row.discountRate)) errs.push(`Row ${row.rowNumber}: Discount Rate must be numeric.`);
         return errs;
       });
       setQuotesImportRows(parsedRows);
@@ -3244,19 +3259,19 @@ function App() {
       const validationErrors = parsedRows.flatMap(row => {
         const errors = [];
         if (!row.billNumber) errors.push(`Row ${row.rowNumber}: Bill Number is required.`);
+        else if (isSciNotation(row.billNumber)) errors.push(`Row ${row.rowNumber}: Bill Number "${row.billNumber}" is in scientific notation — Excel converted it from a large number. In Excel, select the Bill Number column → Format Cells → Text → re-save as CSV.`);
         if (!row.contactName) errors.push(`Row ${row.rowNumber}: Contact Name is required.`);
         if (!row.billDate) errors.push(`Row ${row.rowNumber}: Bill Date is required.`);
+        else if (!isLikelyDate(row.billDate)) errors.push(`Row ${row.rowNumber}: Bill Date "${row.billDate}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
         if (!row.dueDate) errors.push(`Row ${row.rowNumber}: Due Date is required.`);
+        else if (!isLikelyDate(row.dueDate)) errors.push(`Row ${row.rowNumber}: Due Date "${row.dueDate}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
         if (!row.description) errors.push(`Row ${row.rowNumber}: Line Description is required.`);
         if (!row.accountCode) errors.push(`Row ${row.rowNumber}: Account Code is required.`);
         const _billUa = String(row.unitAmount || "").trim();
         if (!_billUa || isNaN(Number(_billUa))) errors.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number (e.g. 100.00).`);
-        if (row.exchangeRate && Number.isNaN(Number(row.exchangeRate))) {
-          errors.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
-        }
-        if (row.taxAmount && Number.isNaN(Number(row.taxAmount))) {
-          errors.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
-        }
+        if (row.quantity && !isValidNum(row.quantity)) errors.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+        if (row.exchangeRate && !isValidNum(row.exchangeRate)) errors.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+        if (row.taxAmount && !isValidNum(row.taxAmount)) errors.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
         return errors;
       });
       setBillsImportRows(parsedRows);
@@ -3648,14 +3663,17 @@ function App() {
       const validationErrors = parsedRows.flatMap(row => {
         const errs = [];
         if (!row.creditNoteNumber) errs.push(`Row ${row.rowNumber}: Credit Note Number is required.`);
+        else if (isSciNotation(row.creditNoteNumber)) errs.push(`Row ${row.rowNumber}: Credit Note Number "${row.creditNoteNumber}" is in scientific notation — Excel converted it from a large number. In Excel, select the Credit Note Number column → Format Cells → Text → re-save as CSV.`);
         if (!row.contactName) errs.push(`Row ${row.rowNumber}: Contact Name is required.`);
         if (!row.creditNoteDate) errs.push(`Row ${row.rowNumber}: Credit Note Date is required.`);
+        else if (!isLikelyDate(row.creditNoteDate)) errs.push(`Row ${row.rowNumber}: Credit Note Date "${row.creditNoteDate}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
         if (!row.description) errs.push(`Row ${row.rowNumber}: Line Description is required.`);
         if (!row.accountCode) errs.push(`Row ${row.rowNumber}: Account Code is required.`);
         const _cnUa = String(row.unitAmount || "").trim();
         if (!_cnUa || isNaN(Number(_cnUa))) errs.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number (e.g. 100.00).`);
-        if (row.exchangeRate && Number.isNaN(Number(row.exchangeRate))) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
-        if (row.taxAmount && Number.isNaN(Number(row.taxAmount))) errs.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+        if (row.exchangeRate && !isValidNum(row.exchangeRate)) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+        if (row.taxAmount && !isValidNum(row.taxAmount)) errs.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
         return errs;
       });
       setCreditNotesImportRows(parsedRows);
@@ -3749,14 +3767,18 @@ function App() {
       const validationErrors = parsedRows.flatMap(row => {
         const errors = [];
         if (!row.invoiceNumber) errors.push(`Row ${row.rowNumber}: Invoice Number is required.`);
+        else if (isSciNotation(row.invoiceNumber)) errors.push(`Row ${row.rowNumber}: Invoice Number "${row.invoiceNumber}" is in scientific notation — Excel converted it from a large number. In Excel, select the Invoice Number column → Format Cells → Text → re-save as CSV.`);
         if (!row.contactName) errors.push(`Row ${row.rowNumber}: Contact Name is required.`);
         if (!row.invoiceDate) errors.push(`Row ${row.rowNumber}: Invoice Date is required.`);
+        else if (!isLikelyDate(row.invoiceDate)) errors.push(`Row ${row.rowNumber}: Invoice Date "${row.invoiceDate}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
+        if (row.dueDate && !isLikelyDate(row.dueDate)) errors.push(`Row ${row.rowNumber}: Due Date "${row.dueDate}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
         if (!row.description) errors.push(`Row ${row.rowNumber}: Line Description is required.`);
         if (!row.accountCode) errors.push(`Row ${row.rowNumber}: Account Code is required.`);
         const _invUa = String(row.unitAmount || "").trim();
         if (!_invUa || isNaN(Number(_invUa))) errors.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number (e.g. 100.00).`);
-        if (row.exchangeRate && Number.isNaN(Number(row.exchangeRate))) errors.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
-        if (row.taxAmount && Number.isNaN(Number(row.taxAmount))) errors.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
+        if (row.quantity && !isValidNum(row.quantity)) errors.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+        if (row.exchangeRate && !isValidNum(row.exchangeRate)) errors.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+        if (row.taxAmount && !isValidNum(row.taxAmount)) errors.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
         return errors;
       });
       setInvoicesImportRows(parsedRows);
@@ -3853,6 +3875,7 @@ function App() {
         if (!row.creditNoteNumber) errs.push(`Row ${row.rowNumber}: Credit Note Number is required.`);
         if (!row.bankAccountCode) errs.push(`Row ${row.rowNumber}: Bank Account Code is required.`);
         if (!row.date) errs.push(`Row ${row.rowNumber}: Date is required.`);
+        else if (!isLikelyDate(row.date)) errs.push(`Row ${row.rowNumber}: Date "${row.date}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
         if (!row.amount || isNaN(Number(row.amount))) errs.push(`Row ${row.rowNumber}: Amount is required and must be a number.`);
         if (row.currencyRate && isNaN(Number(row.currencyRate))) errs.push(`Row ${row.rowNumber}: Currency Rate must be numeric.`);
         return errs;
@@ -3923,6 +3946,7 @@ function App() {
         if (!row.invoiceNumber) errs.push(`Row ${row.rowNumber}: Invoice Number is required.`);
         if (!row.bankAccountCode) errs.push(`Row ${row.rowNumber}: Bank Account Code is required.`);
         if (!row.date) errs.push(`Row ${row.rowNumber}: Date is required.`);
+        else if (!isLikelyDate(row.date)) errs.push(`Row ${row.rowNumber}: Date "${row.date}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
         if (!row.amount || isNaN(Number(row.amount))) errs.push(`Row ${row.rowNumber}: Amount is required and must be a number.`);
         if (row.currencyRate && isNaN(Number(row.currencyRate))) errs.push(`Row ${row.rowNumber}: Currency Rate must be numeric.`);
         return errs;
@@ -4027,6 +4051,19 @@ function App() {
     setJobId: setInvoicePaymentJobId,
     setProgress: setInvoicePaymentProgress
   });
+  const isLikelyDate = (val) => {
+    const s = String(val || "").trim();
+    if (!s) return false;
+    return (
+      /^\d{4}-\d{2}-\d{2}$/.test(s) ||
+      /^\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{2,4}$/.test(s)
+    );
+  };
+  const isValidNum = (val) => {
+    const s = String(val || "").trim();
+    return s !== "" && !isNaN(Number(s));
+  };
+  const isSciNotation = (val) => /^[+-]?[\d.]+[Ee][+-]?\d+$/.test(String(val || "").trim());
   const manualJournalImportHeaders = ["Journal Reference", "Date", "Account Code", "Line Description", "Tax Type"];
   const validateManualJournals = (journals) => journals.flatMap(journal => {
     const errs = [];
@@ -4085,33 +4122,49 @@ function App() {
         if (!row.name) errs.push(`Row ${r}: Name is required.`);
       } else if (type === "bills") {
         if (!row.contactName) errs.push(`Row ${r}: Contact Name is required.`);
-        if (!row.invoiceDate) errs.push(`Row ${r}: Date is required.`);
+        if (!row.billDate) errs.push(`Row ${r}: Date is required.`);
+        else if (!isLikelyDate(row.billDate)) errs.push(`Row ${r}: Bill Date "${row.billDate}" is not a valid date.`);
         if (!row.dueDate) errs.push(`Row ${r}: Due Date is required.`);
+        else if (!isLikelyDate(row.dueDate)) errs.push(`Row ${r}: Due Date "${row.dueDate}" is not a valid date.`);
         if (!row.description) errs.push(`Row ${r}: Description is required.`);
         const _ua = String(row.unitAmount ?? "").trim();
-        if (!_ua || isNaN(Number(_ua))) errs.push(`Row ${r}: Unit Amount is required and must be a number (e.g. 100.00).`);
+        if (!_ua || !isValidNum(row.unitAmount)) errs.push(`Row ${r}: Unit Amount is required and must be a number (e.g. 100.00).`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${r}: Quantity must be a number.`);
       } else if (type === "invoices") {
         if (!row.contactName) errs.push(`Row ${r}: Contact Name is required.`);
         if (!row.invoiceDate) errs.push(`Row ${r}: Date is required.`);
-        if (!row.dueDate) errs.push(`Row ${r}: Due Date is required.`);
+        else if (!isLikelyDate(row.invoiceDate)) errs.push(`Row ${r}: Invoice Date "${row.invoiceDate}" is not a valid date.`);
+        if (row.dueDate && !isLikelyDate(row.dueDate)) errs.push(`Row ${r}: Due Date "${row.dueDate}" is not a valid date.`);
         if (!row.description) errs.push(`Row ${r}: Description is required.`);
         const _ua = String(row.unitAmount ?? "").trim();
-        if (!_ua || isNaN(Number(_ua))) errs.push(`Row ${r}: Unit Amount is required and must be a number (e.g. 100.00).`);
+        if (!_ua || !isValidNum(row.unitAmount)) errs.push(`Row ${r}: Unit Amount is required and must be a number (e.g. 100.00).`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${r}: Quantity must be a number.`);
       } else if (type === "credit-notes") {
         if (!row.contactName) errs.push(`Row ${r}: Contact Name is required.`);
         if (!row.date) errs.push(`Row ${r}: Date is required.`);
+        else if (!isLikelyDate(row.date)) errs.push(`Row ${r}: Credit Note Date "${row.date}" is not a valid date.`);
         const _ua = String(row.unitAmount ?? "").trim();
-        if (!_ua || isNaN(Number(_ua))) errs.push(`Row ${r}: Unit Amount is required and must be a number (e.g. 100.00).`);
+        if (!_ua || !isValidNum(row.unitAmount)) errs.push(`Row ${r}: Unit Amount is required and must be a number (e.g. 100.00).`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${r}: Quantity must be a number.`);
       } else if (type === "spend-money" || type === "receive-money") {
         if (!row.contactName) errs.push(`Row ${r}: Contact Name is required.`);
         if (!row.date) errs.push(`Row ${r}: Date is required.`);
+        else if (!isLikelyDate(row.date)) errs.push(`Row ${r}: Date "${row.date}" is not a valid date.`);
         if (!row.accountCode) errs.push(`Row ${r}: Account Code is required.`);
+        const _ua = String(row.unitAmount ?? "").trim();
+        if (!_ua || !isValidNum(row.unitAmount)) errs.push(`Row ${r}: Unit Amount is required and must be a number.`);
       } else if (type === "purchase-orders") {
         if (!row.contactName) errs.push(`Row ${r}: Contact Name is required.`);
-        if (!row.date) errs.push(`Row ${r}: Date is required.`);
+        if (row.date && !isLikelyDate(row.date)) errs.push(`Row ${r}: Date "${row.date}" is not a valid date.`);
+        const _ua = String(row.unitAmount ?? "").trim();
+        if (!_ua || !isValidNum(row.unitAmount)) errs.push(`Row ${r}: Unit Amount is required and must be a number.`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${r}: Quantity must be a number.`);
       } else if (type === "quotes") {
         if (!row.contactName) errs.push(`Row ${r}: Contact Name is required.`);
-        if (!row.date) errs.push(`Row ${r}: Date is required.`);
+        if (row.date && !isLikelyDate(row.date)) errs.push(`Row ${r}: Date "${row.date}" is not a valid date.`);
+        const _ua = String(row.unitAmount ?? "").trim();
+        if (!_ua || !isValidNum(row.unitAmount)) errs.push(`Row ${r}: Unit Amount is required and must be a number.`);
+        if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${r}: Quantity must be a number.`);
       } else if (type === "bill-payments") {
         if (!row.invoiceNumber) errs.push(`Row ${r}: Invoice/Bill Number is required.`);
         if (!row.date) errs.push(`Row ${r}: Date is required.`);
@@ -4616,9 +4669,13 @@ function App() {
       const errs = [];
       if (!row.contactName) errs.push(`Row ${row.rowNumber}: Contact Name is required.`);
       if (!row.date) errs.push(`Row ${row.rowNumber}: Date is required.`);
+      else if (!isLikelyDate(row.date)) errs.push(`Row ${row.rowNumber}: Date "${row.date}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
       if (!row.bankAccountCode) errs.push(`Row ${row.rowNumber}: Bank Account Code is required.`);
-      if (!row.unitAmount) errs.push(`Row ${row.rowNumber}: Unit Amount is required.`);
-      if (row.exchangeRate && Number.isNaN(Number(row.exchangeRate))) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+      const _opUa = String(row.unitAmount || "").trim();
+      if (!_opUa || !isValidNum(row.unitAmount)) errs.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number.`);
+      if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+      if (row.exchangeRate && !isValidNum(row.exchangeRate)) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+      if (row.taxAmount && !isValidNum(row.taxAmount)) errs.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
       return errs;
     });
     return {
@@ -4833,7 +4890,13 @@ function App() {
       if (!row.bankAccountCode) errs.push(`Row ${row.rowNumber}: Bank Account Code is required.`);
       if (!row.contactName) errs.push(`Row ${row.rowNumber}: Contact Name is required.`);
       if (!row.date) errs.push(`Row ${row.rowNumber}: Date is required.`);
+      else if (!isLikelyDate(row.date)) errs.push(`Row ${row.rowNumber}: Date "${row.date}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
       if (!row.description) errs.push(`Row ${row.rowNumber}: Line Description is required.`);
+      const _smUa = String(row.unitAmount || "").trim();
+      if (!_smUa || !isValidNum(row.unitAmount)) errs.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number.`);
+      if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+      if (row.exchangeRate && !isValidNum(row.exchangeRate)) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+      if (row.taxAmount && !isValidNum(row.taxAmount)) errs.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
       return errs;
     });
     return {
@@ -4941,7 +5004,13 @@ function App() {
       if (!row.bankAccountCode) errs.push(`Row ${row.rowNumber}: Bank Account Code is required.`);
       if (!row.contactName) errs.push(`Row ${row.rowNumber}: Contact Name is required.`);
       if (!row.date) errs.push(`Row ${row.rowNumber}: Date is required.`);
+      else if (!isLikelyDate(row.date)) errs.push(`Row ${row.rowNumber}: Date "${row.date}" is not a valid date. Use DD/MM/YYYY or YYYY-MM-DD format.`);
       if (!row.description) errs.push(`Row ${row.rowNumber}: Line Description is required.`);
+      const _rmUa = String(row.unitAmount || "").trim();
+      if (!_rmUa || !isValidNum(row.unitAmount)) errs.push(`Row ${row.rowNumber}: Unit Amount is required and must be a number.`);
+      if (row.quantity && !isValidNum(row.quantity)) errs.push(`Row ${row.rowNumber}: Quantity must be a number.`);
+      if (row.exchangeRate && !isValidNum(row.exchangeRate)) errs.push(`Row ${row.rowNumber}: Exchange Rate must be numeric.`);
+      if (row.taxAmount && !isValidNum(row.taxAmount)) errs.push(`Row ${row.rowNumber}: Tax Amount must be numeric.`);
       return errs;
     });
     return {

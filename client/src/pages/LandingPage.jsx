@@ -46,22 +46,22 @@ const LP_FAQS = [
 ];
 
 const LP_IMPORT_TYPES = [
-  { icon: "📄", name: "Invoices", desc: "Sales invoices, DRAFT or AUTHORISED" },
-  { icon: "📋", name: "Bills", desc: "Purchase bills with line items" },
-  { icon: "📝", name: "Credit Notes", desc: "Sales and purchase credit notes" },
-  { icon: "💸", name: "Overpayments", desc: "Customer & supplier overpayments" },
-  { icon: "💰", name: "Spend Money", desc: "Bank spend transactions" },
-  { icon: "💵", name: "Receive Money", desc: "Bank receive transactions" },
-  { icon: "🤝", name: "Contacts", desc: "Customers & suppliers in bulk" },
-  { icon: "📦", name: "Items", desc: "Inventory & non-inventory items" },
-  { icon: "📑", name: "Quotes", desc: "Xero quotes and estimates" },
-  { icon: "🛒", name: "Purchase Orders", desc: "Approved purchase orders" },
-  { icon: "📓", name: "Manual Journals", desc: "Debit/credit journal entries" },
-  { icon: "💳", name: "Bill Payments", desc: "Link payments to existing bills" },
-  { icon: "🧾", name: "Invoice Payments", desc: "Link payments to invoices" },
-  { icon: "↩️", name: "Credit Refunds", desc: "Refund credit notes to contacts" },
-  { icon: "🏦", name: "Bank Transfers", desc: "Inter-account bank transfers" },
-  { icon: "🔄", name: "Tracking Categories", desc: "Xero tracking options & groups" },
+  { icon: "📄", name: "Invoices", desc: "Sales invoices, DRAFT or AUTHORISED", plan: "starter" },
+  { icon: "📋", name: "Bills", desc: "Purchase bills with line items", plan: "starter" },
+  { icon: "💰", name: "Spend Money", desc: "Bank spend transactions", plan: "starter" },
+  { icon: "💵", name: "Receive Money", desc: "Bank receive transactions", plan: "starter" },
+  { icon: "🤝", name: "Contacts", desc: "Customers & suppliers in bulk", plan: "starter" },
+  { icon: "🔄", name: "Tracking Categories", desc: "Xero tracking options & groups", plan: "starter" },
+  { icon: "📝", name: "Credit Notes", desc: "Sales and purchase credit notes", plan: "pro" },
+  { icon: "📦", name: "Items", desc: "Inventory & non-inventory items", plan: "pro" },
+  { icon: "📑", name: "Quotes", desc: "Xero quotes and estimates", plan: "pro" },
+  { icon: "🛒", name: "Purchase Orders", desc: "Approved purchase orders", plan: "pro" },
+  { icon: "📓", name: "Manual Journals", desc: "Debit/credit journal entries", plan: "pro" },
+  { icon: "💳", name: "Bill Payments", desc: "Link payments to existing bills", plan: "pro" },
+  { icon: "🧾", name: "Invoice Payments", desc: "Link payments to invoices", plan: "pro" },
+  { icon: "↩️", name: "Credit Refunds", desc: "Refund credit notes to contacts", plan: "pro" },
+  { icon: "🏦", name: "Bank Transfers", desc: "Inter-account bank transfers", plan: "pro" },
+  { icon: "💸", name: "Overpayments", desc: "Customer & supplier overpayments", plan: "growth" },
 ];
 
 const CSS = `
@@ -217,11 +217,19 @@ const CSS = `
 
 /* IMPORT TYPES */
 .lp-tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:13px;max-width:1200px;margin:0 auto}
-.lp-tc{background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:20px 16px;text-align:center;transition:all .2s}
+.lp-tc{background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:20px 16px;text-align:center;transition:all .2s;position:relative}
 .lp-tc:hover{border-color:rgba(13,148,136,0.3);box-shadow:0 4px 18px rgba(13,148,136,0.08);transform:translateY(-2px)}
 .lp-tc-icon{font-size:28px;margin-bottom:10px;display:block}
 .lp-tc-name{font-size:13px;font-weight:700;color:#0C1E35;line-height:1.3}
 .lp-tc-desc{font-size:11px;color:#527090;margin-top:3px;line-height:1.4}
+.lp-tc-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:100px;white-space:nowrap}
+.lp-tc-badge--s{background:rgba(45,212,191,0.1);color:#0D9488;border:1px solid rgba(45,212,191,0.25)}
+.lp-tc-badge--p{background:rgba(129,140,248,0.1);color:#6366f1;border:1px solid rgba(129,140,248,0.25)}
+.lp-tc-badge--g{background:rgba(251,191,36,0.1);color:#b45309;border:1px solid rgba(251,191,36,0.3)}
+/* TYPE LEGEND */
+.lp-type-legend{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px;margin-bottom:28px}
+.lp-type-legend span{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#527090}
+.lp-type-legend-dot{width:8px;height:8px;border-radius:50%}
 
 /* PRICING */
 .lp-pricing-ctrl{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px;margin-bottom:44px}
@@ -346,29 +354,28 @@ const CSS = `
 
 function VideoBox({ label, badge, barWidth, barTime, ytId }) {
   const [playing, setPlaying] = useState(false);
-  const play = () => {
-    if (!ytId || ytId.startsWith("YOUR_")) {
-      alert("Video tutorial coming soon! Stay tuned.");
-      return;
-    }
-    setPlaying(true);
-  };
+  const hasVideo = ytId && !ytId.startsWith("YOUR_") && ytId.length > 0;
+  const play = () => { if (hasVideo) setPlaying(true); };
   return (
-    <div className="lp-vm" onClick={!playing ? play : undefined}>
+    <div className="lp-vm" onClick={!playing && hasVideo ? play : undefined} style={{ cursor: hasVideo ? "pointer" : "default" }}>
       {!playing ? (
         <>
           <div className="lp-vm-bg" />
           <div className="lp-vm-glow" />
           <div className="lp-vm-center">
-            <button className="lp-vm-play" onClick={play}>
-              <svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21" /></svg>
-            </button>
+            {hasVideo ? (
+              <button className="lp-vm-play" onClick={play}>
+                <svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21" /></svg>
+              </button>
+            ) : (
+              <div style={{ width: 68, height: 68, borderRadius: "50%", background: "rgba(45,212,191,0.15)", border: "1.5px solid rgba(45,212,191,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>🎬</div>
+            )}
             <div className="lp-vm-label">{label}</div>
-            <div className="lp-vm-badge">{badge}</div>
+            <div className="lp-vm-badge">{hasVideo ? badge : "▶ Video tutorial coming soon"}</div>
           </div>
           <div className="lp-vm-bottom">
-            <div className="lp-vm-prog"><div className="lp-vm-bar" style={{ width: barWidth }} /></div>
-            <span className="lp-vm-time">{barTime}</span>
+            <div className="lp-vm-prog"><div className="lp-vm-bar" style={{ width: hasVideo ? barWidth : "0%" }} /></div>
+            <span className="lp-vm-time">{hasVideo ? barTime : "–:–"}</span>
           </div>
         </>
       ) : (
@@ -685,14 +692,27 @@ export default function LandingPage({ onLogin }) {
           <h2>Every Xero document type your workflow needs</h2>
           <p>From simple contact lists to complex multi-line manual journals — ImportMyBooks handles every Xero document type with one consistent, reliable import workflow.</p>
         </div>
+        <div className="lp-type-legend lp-fu">
+          <span><span className="lp-type-legend-dot" style={{ background: "#0D9488" }} />All Plans (incl. Starter)</span>
+          <span><span className="lp-type-legend-dot" style={{ background: "#6366f1" }} />Professional &amp; above</span>
+          <span><span className="lp-type-legend-dot" style={{ background: "#b45309" }} />Growth &amp; above</span>
+        </div>
         <div className="lp-tg">
-          {LP_IMPORT_TYPES.map((t, i) => (
-            <div key={t.name} className="lp-tc lp-fu" style={{ transitionDelay: `${i * 0.04}s` }}>
-              <span className="lp-tc-icon">{t.icon}</span>
-              <div className="lp-tc-name">{t.name}</div>
-              <div className="lp-tc-desc">{t.desc}</div>
-            </div>
-          ))}
+          {LP_IMPORT_TYPES.map((t, i) => {
+            const badge = t.plan === "starter"
+              ? { cls: "lp-tc-badge--s", label: "All Plans" }
+              : t.plan === "pro"
+              ? { cls: "lp-tc-badge--p", label: "Professional+" }
+              : { cls: "lp-tc-badge--g", label: "Growth+" };
+            return (
+              <div key={t.name} className="lp-tc lp-fu" style={{ transitionDelay: `${i * 0.04}s` }}>
+                <span className="lp-tc-icon">{t.icon}</span>
+                <div className="lp-tc-name">{t.name}</div>
+                <div className="lp-tc-desc">{t.desc}</div>
+                <div className={`lp-tc-badge ${badge.cls}`}>{badge.label}</div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -718,6 +738,13 @@ export default function LandingPage({ onLogin }) {
           </div>
         </div>
 
+        {curr === "ZAR" && (
+          <div style={{ textAlign: "center", marginBottom: 20 }}>
+            <span style={{ fontSize: 12.5, color: "#d97706", background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: 8, padding: "7px 16px", display: "inline-block" }}>
+              ⚠️ ZAR prices shown for reference — payments are processed in USD via Razorpay
+            </span>
+          </div>
+        )}
         <div className="lp-pg">
           {/* Testing */}
           <div className="lp-pc lp-fu">
@@ -741,13 +768,14 @@ export default function LandingPage({ onLogin }) {
               <span className="lp-plan-price-main">{pricePrefix}{price("starter")}</span>
               <span className="lp-plan-price-period">{priceSuffix("starter")}</span>
             </div>
-            <div className="lp-plan-billing-note">{isAnnual ? "billed annually" : "billed monthly"}</div>
+            <div className="lp-plan-billing-note">{isAnnual ? "billed annually" : "billed monthly"}{curr === "ZAR" ? " · charged in USD" : ""}</div>
             <div className="lp-plan-div" />
             <ul className="lp-pf">
               <li>Up to 1,000 records per import</li>
               <li>1 Xero organisation</li>
-              <li>Invoices, Bills, Credit Notes, POs, Quotes</li>
-              <li>Contacts, Items, Payments, Spend &amp; Receive</li>
+              <li>Invoices &amp; Bills (AR + AP)</li>
+              <li>Spend &amp; Receive Money</li>
+              <li>Contacts &amp; Chart of Accounts</li>
               <li>Import History (3 months)</li>
               <li>Email support (48h)</li>
             </ul>
@@ -850,6 +878,52 @@ export default function LandingPage({ onLogin }) {
                         {v === true ? <span className="lp-ck">✓</span>
                           : v === false ? <span className="lp-cx">—</span>
                           : v}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* COMPETITOR COMPARISON */}
+      <section className="lp-sec" style={{ background: "#F2F7FF", paddingTop: 48, paddingBottom: 48 }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div className="lp-sh lp-fu" style={{ marginBottom: 28 }}>
+            <div className="lp-sh-k">How we compare</div>
+            <h2 style={{ fontSize: "clamp(22px,3vw,34px)" }}>The most complete Xero import tool on the market</h2>
+          </div>
+          <div style={{ overflowX: "auto", borderRadius: 14, border: "1.5px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 20px rgba(0,0,0,0.05)" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+              <thead>
+                <tr>
+                  <th style={{ background: "#0C2040", color: "rgba(255,255,255,0.4)", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", padding: "13px 16px", textAlign: "left", borderRight: "1px solid rgba(255,255,255,0.07)" }}>Feature</th>
+                  {[["ImportMyBooks","#2DD4BF"],["SaaSant","rgba(255,255,255,0.45)"],["DataDear","rgba(255,255,255,0.45)"],["Simple Importer","rgba(255,255,255,0.45)"]].map(([n,c]) => (
+                    <th key={n} style={{ background: "#0C2040", color: c, fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", padding: "13px 16px", textAlign: "center", borderRight: "1px solid rgba(255,255,255,0.07)" }}>{n}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ["Import types", "17+", "~8", "~6", "~5"],
+                  ["Auto Allocation engine", true, false, false, false],
+                  ["Delete Centre (9 types)", true, false, false, false],
+                  ["Update Centre", true, false, false, false],
+                  ["Overpayments & Prepayments", true, false, false, false],
+                  ["Import Resume", true, false, false, false],
+                  ["Partial import (skip errors)", true, false, false, false],
+                  ["Xero Pre-Validation", true, false, false, false],
+                  ["Multi-user RBAC", true, false, false, false],
+                ].map((row, ri) => (
+                  <tr key={ri}>
+                    <td style={{ padding: "10px 16px", borderBottom: "1px solid rgba(0,0,0,0.07)", fontWeight: 600, color: "#0C1E35", background: ri % 2 === 0 ? "#fff" : "#F2F7FF" }}>{row[0]}</td>
+                    {row.slice(1).map((v, vi) => (
+                      <td key={vi} style={{ padding: "10px 16px", borderBottom: "1px solid rgba(0,0,0,0.07)", textAlign: "center", background: vi === 0 ? (ri % 2 === 0 ? "rgba(12,32,64,0.03)" : "rgba(12,32,64,0.05)") : (ri % 2 === 0 ? "#fff" : "#F2F7FF") }}>
+                        {v === true ? <span style={{ color: "#2DD4BF", fontSize: 15, fontWeight: 900 }}>✓</span>
+                          : v === false ? <span style={{ color: "#CBD5E1" }}>—</span>
+                          : <span style={{ fontSize: 13, fontWeight: vi === 0 ? 700 : 400, color: vi === 0 ? "#0D9488" : "#527090" }}>{v}</span>}
                       </td>
                     ))}
                   </tr>
