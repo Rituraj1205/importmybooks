@@ -1,12 +1,68 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xero Tool</title>
+    <title>ImportMyBooks — Xero Import Tool</title>
+    <style>
+      #root-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #0f172a;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
+      }
+      #root-loader.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .rl-logo {
+        font-family: system-ui, sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+        margin-bottom: 28px;
+      }
+      .rl-logo span { color: #2dd4bf; }
+      .rl-spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgba(255,255,255,0.1);
+        border-top-color: #2dd4bf;
+        border-radius: 50%;
+        animation: rl-spin 0.75s linear infinite;
+      }
+      @keyframes rl-spin { to { transform: rotate(360deg); } }
+    </style>
   </head>
   <body>
+    <div id="root-loader">
+      <div class="rl-logo">Import<span>MyBooks</span></div>
+      <div class="rl-spinner"></div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Hide loader once React has mounted
+      document.addEventListener('DOMContentLoaded', function() {
+        var observer = new MutationObserver(function() {
+          var root = document.getElementById('root');
+          if (root && root.children.length > 0) {
+            var loader = document.getElementById('root-loader');
+            if (loader) {
+              loader.classList.add('hidden');
+              setTimeout(function() { loader.remove(); }, 350);
+            }
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.getElementById('root'), { childList: true });
+      });
+    </script>
   </body>
 </html>

@@ -62,7 +62,7 @@ const PAID_PLANS = [
     cta: "Get Started",
     features: [
       "1 Xero organisation",
-      "Up to 500 records per import",
+      "Up to 1,000 records per import",
       "Invoices, Bills & Credit Notes (AR + AP)",
       "Quotes & Purchase Orders",
       "Invoice & Bill Payments",
@@ -97,7 +97,7 @@ const PAID_PLANS = [
     cta: "Get Started",
     features: [
       "Up to 5 Xero organisations",
-      "Unlimited records per import",
+      "Up to 10,000 records per import",
       "All 17+ import types (incl. Manual Journals, Bank Transfers, Overpayments)",
       "Auto Allocation — Credit Notes → Invoices, Debit Notes → Bills, Overpayments",
       "Delete Centre — 9 types: Invoice/Bill Void, Payment Delete, Quote Delete, PO Delete, Spend/Receive Delete, Bank Transfer Delete, Contact Archive",
@@ -171,7 +171,7 @@ const PAID_PLANS = [
 
 const COMPARE_ROWS = [
   { label: "Xero organisations",          values: ["1",    "5",        "15",       "Unlimited"] },
-  { label: "Records per import",          values: ["500",  "Unlimited","Unlimited","Unlimited"] },
+  { label: "Records per import",          values: ["1,000","Up to 10,000","Unlimited","Unlimited"] },
   { label: "Import types",                values: ["12",   "All 17+",  "All 17+",  "All 17+"]  },
   { label: "Auto Allocation engine",      values: [false,  true,       true,       true]        },
   { label: "Delete Centre (9 types)",     values: [false,  true,       true,       true]        },

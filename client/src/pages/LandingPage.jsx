@@ -655,7 +655,7 @@ export default function LandingPage({ onLogin }) {
           <div className="lp-ft lp-fu">
             <div className="lp-ftag lp-ftag--w">⇌ Xero Auto Allocation</div>
             <h2>Automatically match payments to outstanding invoices</h2>
-            <p className="lp-ftsub">Stop manually allocating credit notes and overpayments one by one. Our smart matching engine groups by contact and currency, then allocates oldest invoice first — automatically. Available on the Enterprise plan.</p>
+            <p className="lp-ftsub">Stop manually allocating credit notes and overpayments one by one. Our smart matching engine groups by contact and currency, then allocates oldest invoice first — automatically. Available on the Professional plan and above.</p>
             <ul className="lp-fl">
               <li>Match credit notes → outstanding sales invoices</li>
               <li>Match overpayments &amp; prepayments → invoices &amp; bills</li>
@@ -664,7 +664,7 @@ export default function LandingPage({ onLogin }) {
               <li>Oldest-invoice-first allocation priority</li>
               <li>Remove allocations or fix allocation dates in bulk</li>
             </ul>
-            <button className="lp-btn-p" style={{ width: "fit-content" }} onClick={() => scrollTo("pricing")}>See Enterprise plan →</button>
+            <button className="lp-btn-p" style={{ width: "fit-content" }} onClick={() => scrollTo("pricing")}>See Professional plan →</button>
           </div>
           <div className="lp-fu" style={{ transitionDelay: ".15s" }}>
             <VideoBox
@@ -744,7 +744,7 @@ export default function LandingPage({ onLogin }) {
             <div className="lp-plan-billing-note">{isAnnual ? "billed annually" : "billed monthly"}</div>
             <div className="lp-plan-div" />
             <ul className="lp-pf">
-              <li>Up to 500 records per import</li>
+              <li>Up to 1,000 records per import</li>
               <li>1 Xero organisation</li>
               <li>Invoices, Bills, Credit Notes, POs, Quotes</li>
               <li>Contacts, Items, Payments, Spend &amp; Receive</li>
@@ -831,7 +831,7 @@ export default function LandingPage({ onLogin }) {
               <tbody>
                 {[
                   { label: "Xero organisations",           vals: ["1", "1", "5", "15", "Unlimited"] },
-                  { label: "Records per import",           vals: ["100 total", "500", "Unlimited", "Unlimited", "Unlimited"] },
+                  { label: "Records per import",           vals: ["100 total", "1,000", "Up to 10,000", "Unlimited", "Unlimited"] },
                   { label: "Import types",                 vals: ["Core", "12", "All 17+", "All 17+", "All 17+"] },
                   { label: "Auto Allocation engine",       vals: [false, false, true, true, true] },
                   { label: "Delete Centre (9 types)",      vals: [false, false, true, true, true] },

@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 import express from "express";
+import compression from "compression";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import nodemailer from "nodemailer";
@@ -18,6 +19,7 @@ import { isConfigured as razorpayConfigured, getKeyId as razorpayGetKeyId, creat
 import { sendWelcomeEmail, sendPlanApprovedEmail, sendPaymentReceivedEmail, sendForgotPasswordEmail, sendPasswordResetEmail, sendPlanExpiryWarningEmail, sendPlanExpiredEmail, sendPlanRenewedEmail, sendPlanCancelledEmail } from "./emailService.js";
 
 const app = express();
+app.use(compression());
 // Capture raw body for Stripe webhook signature verification before JSON parsing
 app.use(express.json({
   limit: "150mb",
@@ -704,10 +706,10 @@ const PLAN_CONFIG = {
   },
   professional: {
     maxRowsPerImport: 10000,
-    maxOrgs: 3,
+    maxOrgs: 5,
     allowedImportTypes: ["bills", "invoices", "credit-notes", "credit-note-refunds", "spend-money", "receive-money", "bill-payments", "invoice-payments", "manual-journals", "accounts", "items", "customers", "vendors", "tracking-categories", "purchase-orders", "quotes"],
     exportAccess: true,
-    deleteAccess: false,
+    deleteAccess: true,
     manualJournalsAccess: true,
     paymentImportAccess: true,
     overpaymentAccess: false,
@@ -18159,6 +18161,16 @@ setInterval(() => {
     }
   }
 }, 6 * 60 * 60 * 1000);
+
+// Serve React frontend (production build)
+const clientDistPath = path.join(__dirname, "..", "client", "dist");
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  // SPA catch-all — React Router handles client-side routes
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
