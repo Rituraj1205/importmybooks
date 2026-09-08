@@ -9209,117 +9209,122 @@ function App() {
       setRequestTeamLoading(false);
     };
     return (
-      <div style={{minHeight:"100vh",background:"#030b18",color:"#fff",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",gap:36}}>
+      <div style={{minHeight:"100vh",background:"#030b18",color:"#fff",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",gap:32}}>
+
         {/* Header */}
-        <div style={{textAlign:"center",maxWidth:560}}>
-          <div style={{display:"inline-flex",alignItems:"center",gap:8,marginBottom:18,padding:"5px 14px",borderRadius:20,background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)"}}>
-            <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.08em",color:"rgba(255,255,255,0.45)",textTransform:"uppercase"}}>Choose your plan</span>
+        <div style={{textAlign:"center",maxWidth:520}}>
+          <div style={{display:"inline-flex",alignItems:"center",gap:7,marginBottom:16,padding:"4px 14px",borderRadius:20,background:"rgba(45,212,191,0.08)",border:"1px solid rgba(45,212,191,0.2)"}}>
+            <span style={{fontSize:10,fontWeight:700,letterSpacing:"0.1em",color:"#2dd4bf",textTransform:"uppercase"}}>Get Access</span>
           </div>
-          <h1 style={{fontSize:30,fontWeight:800,margin:"0 0 10px",letterSpacing:"-0.5px"}}>Welcome to <span style={{color:"#2dd4bf"}}>ImportMyBooks</span></h1>
-          <p style={{color:"rgba(255,255,255,0.45)",fontSize:14,margin:0,lineHeight:1.6}}>Select how you'd like to access ImportMyBooks, <span style={{color:"rgba(255,255,255,0.65)"}}>{user.email}</span></p>
+          <h1 style={{fontSize:28,fontWeight:800,margin:"0 0 8px",letterSpacing:"-0.5px",lineHeight:1.2}}>
+            Welcome to <span style={{color:"#2dd4bf"}}>ImportMyBooks</span>
+          </h1>
+          <p style={{color:"rgba(255,255,255,0.4)",fontSize:13.5,margin:0,lineHeight:1.65}}>
+            Choose how you'd like to get started,&nbsp;
+            <span style={{color:"rgba(255,255,255,0.6)",fontWeight:500}}>{user.email}</span>
+          </p>
         </div>
 
-        {/* 4 Cards */}
-        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:14,width:"100%",maxWidth:1100}}>
+        {/* 3 Cards */}
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,width:"100%",maxWidth:860}}>
 
-          {/* Card 1: Testing */}
-          <div style={{background:"rgba(52,211,153,0.04)",border:"1.5px solid rgba(52,211,153,0.28)",borderRadius:16,padding:"26px 22px",display:"flex",flexDirection:"column",gap:0,position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:"linear-gradient(90deg,#34d399,#059669)"}} />
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-              <span style={{fontSize:26}}>🧪</span>
-              <span style={{padding:"3px 10px",borderRadius:20,background:"rgba(52,211,153,0.18)",color:"#34d399",fontSize:10,fontWeight:800,letterSpacing:"0.07em"}}>FREE</span>
+          {/* Card 1: Testing (Free) */}
+          <div style={{background:"rgba(52,211,153,0.04)",border:"1px solid rgba(52,211,153,0.22)",borderRadius:16,padding:"28px 24px",display:"flex",flexDirection:"column",position:"relative",overflow:"hidden"}}>
+            <div style={{position:"absolute",top:0,left:0,right:0,height:2,background:"linear-gradient(90deg,#34d399,#059669)"}} />
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18}}>
+              <span style={{fontSize:28}}>🧪</span>
+              <span style={{padding:"3px 10px",borderRadius:20,background:"rgba(52,211,153,0.15)",color:"#34d399",fontSize:9.5,fontWeight:800,letterSpacing:"0.08em"}}>FREE</span>
             </div>
-            <div style={{fontWeight:800,fontSize:17,marginBottom:4,color:"#fff"}}>Testing</div>
-            <div style={{fontSize:24,fontWeight:900,color:"#34d399",marginBottom:4,letterSpacing:"-0.5px"}}>₹0<span style={{fontSize:13,fontWeight:500,color:"rgba(255,255,255,0.4)"}}>/forever</span></div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:20,lineHeight:1.6}}>Try ImportMyBooks with a small dataset. Admin approves within a few hours.</div>
-            <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:22,flex:1}}>
-              {["100 rows total (all imports)","Bills, Invoices, Contacts","1 Xero organisation","Admin approval required"].map(f=>(
-                <div key={f} style={{display:"flex",alignItems:"flex-start",gap:7,fontSize:12,color:"rgba(255,255,255,0.6)"}}><span style={{color:"#34d399",flexShrink:0,marginTop:1}}>✓</span>{f}</div>
+            <div style={{fontWeight:800,fontSize:18,color:"#fff",marginBottom:3}}>Testing Plan</div>
+            <div style={{fontSize:13,color:"rgba(255,255,255,0.4)",marginBottom:18,lineHeight:1.6}}>Try with real Xero data — no credit card needed. Admin approves within 24 hours.</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,flex:1}}>
+              {[
+                "1 Xero organisation",
+                "100 rows total across all imports",
+                "Core import types (Bills, Invoices, Contacts)",
+                "Admin approval required",
+              ].map(f=>(
+                <div key={f} style={{display:"flex",alignItems:"flex-start",gap:8,fontSize:12.5,color:"rgba(255,255,255,0.55)"}}>
+                  <span style={{color:"#34d399",flexShrink:0,marginTop:1,fontSize:11}}>✓</span>{f}
+                </div>
               ))}
             </div>
             <button type="button" onClick={handleRequestTesting} disabled={requestTestingLoading}
-              style={{padding:"11px 0",background:"rgba(52,211,153,0.14)",color:"#34d399",border:"1.5px solid rgba(52,211,153,0.4)",borderRadius:10,fontWeight:700,fontSize:13,cursor:"pointer",width:"100%"}}>
-              {requestTestingLoading ? "Requesting…" : "Request Testing Access"}
+              style={{padding:"12px 0",background:"rgba(52,211,153,0.12)",color:"#34d399",border:"1px solid rgba(52,211,153,0.35)",borderRadius:10,fontWeight:700,fontSize:13,cursor:"pointer",width:"100%",transition:"opacity 0.15s",opacity:requestTestingLoading?0.6:1}}>
+              {requestTestingLoading ? "Requesting…" : "Request Testing Access →"}
             </button>
           </div>
 
-          {/* Card 2: Starter + Professional */}
-          <div style={{background:"rgba(99,102,241,0.04)",border:"1.5px solid rgba(99,102,241,0.35)",borderRadius:16,padding:"26px 22px",display:"flex",flexDirection:"column",gap:0,position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:"linear-gradient(90deg,#6366f1,#8b5cf6)"}} />
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-              <span style={{fontSize:26}}>🚀</span>
-              <span style={{padding:"3px 10px",borderRadius:20,background:"rgba(99,102,241,0.2)",color:"#818cf8",fontSize:10,fontWeight:800,letterSpacing:"0.07em"}}>PAID</span>
+          {/* Card 2: Paid Plans — HIGHLIGHTED */}
+          <div style={{background:"rgba(129,140,248,0.07)",border:"1px solid rgba(129,140,248,0.35)",borderRadius:16,padding:"28px 24px",display:"flex",flexDirection:"column",position:"relative",overflow:"hidden",boxShadow:"0 0 0 1px rgba(129,140,248,0.15), 0 8px 40px rgba(0,0,0,0.25)"}}>
+            <div style={{position:"absolute",top:0,left:0,right:0,height:2,background:"linear-gradient(90deg,#818cf8,#6366f1)"}} />
+            <div style={{position:"absolute",top:14,right:14,padding:"3px 10px",borderRadius:20,background:"rgba(129,140,248,0.2)",color:"#818cf8",fontSize:9.5,fontWeight:800,letterSpacing:"0.08em"}}>RECOMMENDED</div>
+            <div style={{marginBottom:18}}>
+              <span style={{fontSize:28}}>🚀</span>
             </div>
-            <div style={{fontWeight:800,fontSize:17,marginBottom:4,color:"#fff"}}>Starter & Professional</div>
-            <div style={{fontSize:24,fontWeight:900,color:"#818cf8",marginBottom:4,letterSpacing:"-0.5px"}}>₹3,299<span style={{fontSize:13,fontWeight:500,color:"rgba(255,255,255,0.4)"}}>/mo+</span></div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:14,lineHeight:1.6}}>Instant activation. Pay via Razorpay, no approval needed.</div>
-            <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:10}}>
+            <div style={{fontWeight:800,fontSize:18,color:"#fff",marginBottom:3}}>Paid Plans</div>
+            <div style={{fontSize:13,color:"rgba(255,255,255,0.4)",marginBottom:16,lineHeight:1.6}}>Full access. Instant activation after payment — no approval needed.</div>
+
+            {/* USD price tiers */}
+            <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:22}}>
               {[
-                {name:"Starter",price:"₹3,299",desc:"1 org · 500 records",color:null,badge:null},
-                {name:"Professional",price:"₹8,499",desc:"5 orgs · Unlimited records",color:"#818cf8",badge:"POPULAR"},
-                {name:"Growth",price:"₹14,999",desc:"15 orgs · All features",color:"#2dd4bf",badge:"NEW"},
+                {name:"Starter",  price:"$39",  desc:"1 org",     accent:"rgba(255,255,255,0.5)", popular:false},
+                {name:"Professional", price:"$99", desc:"5 orgs · All tools", accent:"#818cf8", popular:true},
+                {name:"Growth",   price:"$179", desc:"15 orgs · Teams",  accent:"#2dd4bf", popular:false},
               ].map(p=>(
-                <div key={p.name} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 12px",borderRadius:9,background:p.color?"rgba(99,102,241,0.08)":"rgba(255,255,255,0.03)",border:`1px solid ${p.color?"rgba(99,102,241,0.3)":"rgba(255,255,255,0.08)"}`}}>
-                  <div style={{display:"flex",alignItems:"center",gap:6}}>
-                    <span style={{fontSize:12,fontWeight:600,color:p.color||"rgba(255,255,255,0.7)"}}>{p.name}</span>
-                    {p.badge&&<span style={{fontSize:9,fontWeight:800,padding:"1px 6px",borderRadius:10,background:p.badge==="NEW"?"rgba(45,212,191,0.2)":"rgba(99,102,241,0.25)",color:p.badge==="NEW"?"#2dd4bf":"#818cf8"}}>{p.badge}</span>}
-                    <span style={{fontSize:10,color:"rgba(255,255,255,0.35)"}}>{p.desc}</span>
+                <div key={p.name} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 13px",borderRadius:9,background:p.popular?"rgba(129,140,248,0.1)":"rgba(255,255,255,0.03)",border:`1px solid ${p.popular?"rgba(129,140,248,0.3)":"rgba(255,255,255,0.07)"}`}}>
+                  <div style={{display:"flex",alignItems:"center",gap:7}}>
+                    <span style={{fontSize:12.5,fontWeight:700,color:p.accent}}>{p.name}</span>
+                    <span style={{fontSize:11,color:"rgba(255,255,255,0.3)"}}>{p.desc}</span>
                   </div>
-                  <span style={{fontSize:12,fontWeight:800,color:"#fff",whiteSpace:"nowrap"}}>{p.price}<span style={{fontSize:10,fontWeight:400,color:"rgba(255,255,255,0.35)"}}>/mo</span></span>
+                  <span style={{fontSize:13,fontWeight:800,color:"#fff",whiteSpace:"nowrap"}}>
+                    {p.price}<span style={{fontSize:10,fontWeight:400,color:"rgba(255,255,255,0.35)"}}>/mo</span>
+                  </span>
                 </div>
               ))}
             </div>
             <div style={{flex:1}} />
             <button type="button" onClick={() => navigate("/pricing")}
-              style={{padding:"11px 0",background:"rgba(99,102,241,0.14)",color:"#818cf8",border:"1.5px solid rgba(99,102,241,0.4)",borderRadius:10,fontWeight:700,fontSize:13,cursor:"pointer",width:"100%",marginTop:16}}>
+              style={{padding:"12px 0",background:"#818cf8",color:"#fff",border:"none",borderRadius:10,fontWeight:700,fontSize:13,cursor:"pointer",width:"100%",transition:"opacity 0.15s"}}>
               View Plans & Buy Now →
             </button>
+            <div style={{fontSize:11,color:"rgba(255,255,255,0.25)",textAlign:"center",marginTop:10}}>
+              All plans include all 17+ import types · 1,000 API calls/day per org
+            </div>
           </div>
 
-          {/* Card 3: Enterprise / Custom */}
-          <div style={{background:"rgba(245,158,11,0.04)",border:"1.5px solid rgba(245,158,11,0.28)",borderRadius:16,padding:"26px 22px",display:"flex",flexDirection:"column",gap:0,position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:"linear-gradient(90deg,#f59e0b,#d97706)"}} />
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-              <span style={{fontSize:26}}>🏢</span>
-              <span style={{padding:"3px 10px",borderRadius:20,background:"rgba(245,158,11,0.18)",color:"#f59e0b",fontSize:10,fontWeight:800,letterSpacing:"0.07em"}}>CUSTOM</span>
+          {/* Card 3: Team Member */}
+          <div style={{background:"rgba(56,189,248,0.04)",border:"1px solid rgba(56,189,248,0.2)",borderRadius:16,padding:"28px 24px",display:"flex",flexDirection:"column",position:"relative",overflow:"hidden"}}>
+            <div style={{position:"absolute",top:0,left:0,right:0,height:2,background:"linear-gradient(90deg,#38bdf8,#0284c7)"}} />
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18}}>
+              <span style={{fontSize:28}}>👥</span>
+              <span style={{padding:"3px 10px",borderRadius:20,background:"rgba(56,189,248,0.15)",color:"#38bdf8",fontSize:9.5,fontWeight:800,letterSpacing:"0.08em"}}>TEAM</span>
             </div>
-            <div style={{fontWeight:800,fontSize:17,marginBottom:4,color:"#fff"}}>Enterprise</div>
-            <div style={{fontSize:24,fontWeight:900,color:"#f59e0b",marginBottom:4,letterSpacing:"-0.5px"}}>Custom<span style={{fontSize:13,fontWeight:500,color:"rgba(255,255,255,0.4)"}}> pricing</span></div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:20,lineHeight:1.6}}>For large CA firms and enterprise teams. We'll build a custom plan for you.</div>
-            <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:22,flex:1}}>
-              {["Unlimited Xero organisations","Unlimited records per import","Multi-user access with RBAC","Admin dashboard & audit trail","Dedicated account manager","SLA-backed support (4h response)"].map(f=>(
-                <div key={f} style={{display:"flex",alignItems:"flex-start",gap:7,fontSize:12,color:"rgba(255,255,255,0.6)"}}><span style={{color:"#f59e0b",flexShrink:0,marginTop:1}}>✓</span>{f}</div>
-              ))}
-            </div>
-            <button type="button" onClick={() => window.location.href = "mailto:support@importmybooks.com?subject=ImportMyBooks Enterprise Enquiry"}
-              style={{padding:"11px 0",background:"rgba(245,158,11,0.12)",color:"#f59e0b",border:"1.5px solid rgba(245,158,11,0.4)",borderRadius:10,fontWeight:700,fontSize:13,cursor:"pointer",width:"100%"}}>
-              Contact Sales →
-            </button>
-          </div>
-
-          {/* Card 4: Team Member */}
-          <div style={{background:"rgba(56,189,248,0.04)",border:"1.5px solid rgba(56,189,248,0.28)",borderRadius:16,padding:"26px 22px",display:"flex",flexDirection:"column",gap:0,position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:"linear-gradient(90deg,#38bdf8,#0284c7)"}} />
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-              <span style={{fontSize:26}}>👥</span>
-              <span style={{padding:"3px 10px",borderRadius:20,background:"rgba(56,189,248,0.18)",color:"#38bdf8",fontSize:10,fontWeight:800,letterSpacing:"0.07em"}}>INTERNAL</span>
-            </div>
-            <div style={{fontWeight:800,fontSize:17,marginBottom:4,color:"#fff"}}>Team Member</div>
-            <div style={{fontSize:24,fontWeight:900,color:"#38bdf8",marginBottom:4,letterSpacing:"-0.5px"}}>₹0<span style={{fontSize:13,fontWeight:500,color:"rgba(255,255,255,0.4)"}}>/forever</span></div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:20,lineHeight:1.6}}>For internal team members. Admin controls your access. No billing required.</div>
-            <div style={{display:"flex",flexDirection:"column",gap:7,marginBottom:22,flex:1}}>
-              {["Access controlled by admin","No pricing or billing visible","Import & export tools","Admin approval required"].map(f=>(
-                <div key={f} style={{display:"flex",alignItems:"flex-start",gap:7,fontSize:12,color:"rgba(255,255,255,0.6)"}}><span style={{color:"#38bdf8",flexShrink:0,marginTop:1}}>✓</span>{f}</div>
+            <div style={{fontWeight:800,fontSize:18,color:"#fff",marginBottom:3}}>Team Member</div>
+            <div style={{fontSize:13,color:"rgba(255,255,255,0.4)",marginBottom:18,lineHeight:1.6}}>For staff added by your account admin. Access is controlled by your admin — no billing required.</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24,flex:1}}>
+              {[
+                "Full tool access (set by admin)",
+                "No billing or pricing shown",
+                "Import, delete, allocate — as permitted",
+                "Admin approval required",
+              ].map(f=>(
+                <div key={f} style={{display:"flex",alignItems:"flex-start",gap:8,fontSize:12.5,color:"rgba(255,255,255,0.55)"}}>
+                  <span style={{color:"#38bdf8",flexShrink:0,marginTop:1,fontSize:11}}>✓</span>{f}
+                </div>
               ))}
             </div>
             <button type="button" onClick={handleRequestTeam} disabled={requestTeamLoading}
-              style={{padding:"11px 0",background:"rgba(56,189,248,0.12)",color:"#38bdf8",border:"1.5px solid rgba(56,189,248,0.35)",borderRadius:10,fontWeight:700,fontSize:13,cursor:"pointer",width:"100%"}}>
-              {requestTeamLoading ? "Requesting…" : "Request Team Access"}
+              style={{padding:"12px 0",background:"rgba(56,189,248,0.1)",color:"#38bdf8",border:"1px solid rgba(56,189,248,0.3)",borderRadius:10,fontWeight:700,fontSize:13,cursor:"pointer",width:"100%",transition:"opacity 0.15s",opacity:requestTeamLoading?0.6:1}}>
+              {requestTeamLoading ? "Requesting…" : "Request Team Access →"}
             </button>
           </div>
+
         </div>
 
-        <button type="button" onClick={handleLogout} style={{color:"rgba(255,255,255,0.3)",fontSize:12,background:"none",border:"none",cursor:"pointer",letterSpacing:"0.03em"}}>Sign out</button>
+        <button type="button" onClick={handleLogout} style={{color:"rgba(255,255,255,0.25)",fontSize:12,background:"none",border:"none",cursor:"pointer",letterSpacing:"0.03em",marginTop:4}}>
+          Sign out
+        </button>
       </div>
     );
   }

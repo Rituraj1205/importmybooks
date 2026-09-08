@@ -55,6 +55,7 @@ const PLANS = [
     popular: true,
     highlights: [
       "Everything in Starter",
+      "Extraction — pull & export data from Xero (reports, reconciliation)",
       "Auto Allocation — Credit Notes ↔ Invoices & Overpayments in bulk",
       "Delete Centre — bulk void/delete across 9 record types",
       "Update Centre — status, exchange rates, update existing records",
@@ -94,6 +95,7 @@ const ALL_PLANS_INCLUDE = [
 
 const COMPARE = [
   { label: "Xero organisations",        values: ["1",        "Up to 5",    "Up to 15"] },
+  { label: "Extraction (export from Xero)", values: [false,  true,         true] },
   { label: "Auto Allocation engine",    values: [false,      true,         true] },
   { label: "Delete + Update Centre",    values: [false,      true,         true] },
   { label: "Xero Pre-Validation",       values: [false,      true,         true] },
