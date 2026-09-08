@@ -5407,6 +5407,13 @@ h1, h2, h3 {
   .pricing-testing-inner { grid-template-columns: 1fr; }
   .pricing-testing-inner .pricing-testing-cta-col { text-align: left; }
 }
+/* New 3-column plan cards grid */
+.pricing-cards-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+@media (max-width: 860px) {
+  .pricing-cards-grid { grid-template-columns: 1fr !important; }
+}
 /* Plan accent variants */
 .pricing-card--pro {
   border-color: rgba(129,140,248,0.4);
